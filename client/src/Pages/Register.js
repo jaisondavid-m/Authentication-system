@@ -31,13 +31,9 @@ function Register() {
     
         try{
             const res = await axios.post("/auth/register",{name,userid,password});
-            // setMessage("Registered Successfullly")
-            // navigate("/");
             if (res.data.status === "success") {
                 setMessage("Registered Successfully! Redirecting to login...");
-                setTimeout(() => {
-                    navigate("/login");
-                }, 1500);
+                navigate("/login");
             }
         }
         catch(err){

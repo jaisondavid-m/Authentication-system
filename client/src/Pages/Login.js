@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link ,useNavigate} from 'react-router-dom'
 import axios from "../api/axios.js"
 
 function Login() {
+
+
 
     const [userid, setUserid] = useState('')
     const [password, setPassword] = useState('')
@@ -10,13 +12,13 @@ function Login() {
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate();
 
-    const handleLogin =(e)=>{
+    const handleLogin =async (e)=>{
         e.preventDefault();
         setError("")
         setLoading(true);
 
         try{
-            const res=axios.post("/auth/login",{userid,password});
+            const res=await axios.post("/auth/login",{userid,password});
             if(res.data.status==="success"){
                 navigate("/")
             }
@@ -31,6 +33,21 @@ function Login() {
             setLoading(false);
         }
     }
+    useEffect(()=>{
+        const checkauth = async ()=>{
+            try{
+                const res = await axios.get("/auth/verify");
+                if(res.data.status==="success"){
+                    navigate("/")
+                }
+            }
+            catch(err){
+                console.error(err)
+            }
+
+        }
+        checkauth();
+    },[navigate])
 
   return (
     <div>
